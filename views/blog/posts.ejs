@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>Blog</title>
+    <%- include("./partials/head") %>
+</head>
+<body>
+    <%- include("./partials/navbar", {active: "posts"}) %>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-8">
+                <h1>Recent posts</h1>
+                <% posts.reverse().forEach(post=>{ %>
+                    <a href="/blog/editor/editpost/<%= post._id %>">
+                        <div class="card mt-5">
+                            <div class="row no-gutters">
+                                <div class="col-md-4">
+                                    <img src="/blog/images/posts/<%= post.headingImage %>" class="card-img h-100" alt="<%= post.heading %>">
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body">
+                                        <h5 class="card-title"><%= post.heading %></h5>
+                                        <p class="card-text"><%= post.subheading %></p>  
+                                        <small class="text-muted">Last update: <%= `${post.lastUpdate.getDate()}/${post.lastUpdate.getMonth() + 1}/${post.lastUpdate.getFullYear()}` %></small>                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>                     
+                <% }) %>             
+            </div>
+        </div>
+    </div>
+    <%- include("./partials/scripts") %>;
+</body>
+</html>

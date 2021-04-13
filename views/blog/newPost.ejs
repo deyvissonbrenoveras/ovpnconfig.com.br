@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>New Post</title>
+    <%- include("./partials/head") %>
+    <script src="https://cdn.tiny.cloud/1/vnfij7wr5ewnmbkqvjmkdefw0hy651yx4unub1km04zhhug0/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+    <script>
+        tinymce.init({
+          selector: '#content',
+          plugins: [
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table paste code help wordcount'
+        ],
+          images_upload_url: "/blog/editor/uploadimage",
+          images_upload_base_path: "/blog/images/posts",
+          relative_urls : false,
+          automatic_uploads: false,
+        });
+    </script>
+</head>
+<body>
+    <%- include("./partials/navbar", {active: 'newPost'}) %>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <h1>New post</h1>
+                <form id="newPost" action="/blog/editor/newpost" method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-4">
+                            <div class="form-group">
+                                <label for="heading">Heading</label>
+                                <input class="form-control" type="text" name="heading">
+                            </div>                            
+                            <div class="form-group">
+                                <label for="subheading">Subheading</label>
+                                <input class="form-control" type="text" name="subheading">
+                            </div>
+                            <div class="form-group">
+                                <label for="url">Url</label>
+                                <input class="form-control" type="text" name="url">
+                            </div>
+                            <div class="form-group">
+                                <label for="headingImage">Heading Image</label><br>
+                                <img id="headingImage" class="edit-post-image" src="" alt="">
+                                <input id="headingImageInput" class="form-control-file" type="file" name="headingImage"><br>
+                            </div>    
+                            <div class="form-check my-3">                                
+                                <input class="form-check-input" type="checkbox" name="published">
+                                <label class="form-check-label" for="published">Published</label>
+                            </div>
+                            <input class="btn btn-primary btn-block" type="submit">  
+                        </div>
+                        <div class="col-7">
+                            <div class="form-group">
+                                <label for="content">Content</label><br>
+                                <textarea class="form-control" id="content" name="content" rows="30"></textarea>
+                            </div>  
+                        </div>    
+                    </div>
+                                                                         
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include("./partials/scripts") %>;
+    <script>
+        $("#newPost").submit((e)=>{
+            e.preventDefault();
+            tinymce.activeEditor.uploadImages(function(success) {
+                document.forms[0].submit();
+            });
+        })
+        $("#headingImageInput").change(function (){
+            $("#headingImage").attr("src", window.URL.createObjectURL(this.files[0]));
+        })
+    </script>
+</body>
+</html>

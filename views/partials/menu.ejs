@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-white">
+  <a class="navbar-brand" href="/">
+     <img id="logo" src="/images/logo.png" alt="Mikrotik OpenVPN Config Generator" />
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navBarMenu" aria-controls="navBarMenu" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navBarMenu">
+    
+    <ul class="navbar-nav ml-auto">
+      <% if (user) {%>
+        <li class="nav-item">
+          <strong class="nav-link mr-5">User: <%= user.email %></strong>
+        </li>
+      <% } %>  
+      <li class="nav-item">
+        <a class="nav-link d-flex" href="https://github.com/deyvissonbrenoveras/ovpnconfig.com.br">
+          <img src="/images/github.svg" style="width: 24px; margin-right: 3px;"> Github
+        </a>
+      </li>     
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/blog">Blog</a> 
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/about">About</a> 
+      </li>
+      <% if (user) {%>
+        <li>
+          <a class="nav-link" href="/user/resetpassword">Reset Password</a>
+        </li>
+      <% } %>        
+      <li class="nav-item">
+        <% if (user) {%>
+          <a class="nav-link" href="/user/logout">Logout</a>
+        <% } else { %>
+          <a class="nav-link" href="/user/login">Login</a>
+        <% } %> 
+      </li>          
+    </ul>
+  </div>
+</nav>

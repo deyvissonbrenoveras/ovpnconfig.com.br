@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta property="og:url" content="<%= url %>" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="<%= post.heading %>" />
+    <meta property="og:description" content="<%= post.subheading %>" />
+    <meta property="og:image" content="/images/posts/<%= post.headingImage %>" />
+
+    <title><%= post.heading %> - Blog</title>
+    <%- include("./partials/head") %>
+</head>
+<body>
+    <%- include("./partials/navbar", {active: ''}) %>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-md-10 col-lg-7 mt-5 p-4">
+                <h1 class="post-heading mt-3"><%= post.heading %></h1>           
+                <p class="post-subheading mt-4"><%= post.subheading %></p>
+                <div class="row post-publisher text-center align-items-center ">
+                    <div class="col-12 col-md-6 mt-2 p-3 media">
+                        <img class="post-publisher-img" src="/images/publishers/<%= post.publisher.image %>" class="mr-3" alt="...">
+                        <div class="media-body">
+                            <h5 class="mt-0"><%= post.publisher.name %></h5>
+                            <p>Last update: <%= `${post.lastUpdate.getDate()}/${post.lastUpdate.getMonth() + 1}/${post.lastUpdate.getFullYear()}` %></p>
+                        </div>
+                    </div>  
+                    <div class="col-12 col-md-6">
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=<%= url %>"><img class="share-btn" src="/images/util/bc-fb.png" alt=""></a>
+                        <a href="https://twitter.com/intent/tweet?url=<%= url %>"><img class="share-btn" src="/images/util/bc-tw.png" alt=""></a>
+                        <a href="https://api.whatsapp.com/send?text=<%= url %>"><img class="share-btn" src="/images/util/bc-whats.png" alt=""></a>
+                        <a href="https://telegram.me/share/url?url=<%= url %>"><img class="share-btn" src="/images/util/bc-tg.png" alt=""></a>
+                        <a href="https://www.linkedin.com/shareArticle?mini=true&url=<%= url %>"><img class="share-btn" src="/images/util/bc-lkd.png" alt=""></a>
+                        <a href="https://www.pinterest.com/pin/create/button/?url=<%= url %>"><img class="share-btn" src="/images/util/bc-pin.png" alt=""></a>
+                        <a href="mailto:?subject=<%= post.heading %>&body=<%= post.subheading %> <%= url %>"><img class="share-btn" src="/images/util/bc-mail.png" alt=""></a>                           
+                    </div>     
+                </div>
+            </div>
+            <div class="col-12 col-lg-9 text-center">
+                <img src="/images/posts/<%= post.headingImage %>" class="heading-image" alt="<%= post.heading %>">
+            </div>   
+            <div class="col-12 col-md-10 col-lg-7">
+                <div class="post-content mt-5">
+                    <%- post.content %>
+                </div> 
+                <div id="disqus_thread"></div>                
+            </div>
+            <div class="col-3">
+                <h1>Lorem Ipsume</h1>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec id enim iaculis, congue mauris in, dictum dui. Etiam a hendrerit ex. Donec euismod tellus eget tellus auctor, ac eleifend libero posuere. Donec non rhoncus mauris. Curabitur scelerisque nisi ac ligula consectetur tristique. Vestibulum urna justo, pellentesque a erat ut, fermentum lacinia elit. Etiam convallis egestas mauris sit amet faucibus. Morbi dignissim elit id enim dapibus facilisis. Mauris porttitor erat a hendrerit interdum. Curabitur convallis justo facilisis ex finibus pellentesque. Maecenas lectus est, aliquam semper nunc vitae, lacinia imperdiet magna. Interdum et malesuada fames ac ante ipsum primis in faucibus. Donec quis porta sapien.</p>
+            </div>                   
+        </div>
+    </div>
+    <script>
+        var disqus_config = function () {
+        this.page.url = "<%= url %>";  
+        this.page.identifier = "<%= post._id %>"; 
+        };
+        (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://ovpnconfig-com-br.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    <%- include("./partials/scripts") %>;
+</body>
+</html>

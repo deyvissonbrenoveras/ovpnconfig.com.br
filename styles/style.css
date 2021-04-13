@@ -1,0 +1,29 @@
+html {
+    font-size: 0.8rem;
+}
+#lateral_esquerda {
+    font-size: 0.8rem;
+}
+#donate-bitcoin-image{
+    width: 20px;
+}
+.card-produto:hover{
+    cursor: pointer;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.144);
+}
+@media (min-width: 576px) { 
+    
+}
+@media (min-width: 768px) { 
+    
+    html {
+        font-size: 0.9rem;
+    }
+}
+@media (min-width: 992px) { 
+}
+@media (min-width: 1200px) { 
+    html {
+        font-size: 1rem;
+        }
+}

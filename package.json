@@ -1,0 +1,30 @@
+{
+  "name": "ovpngenerator",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "compress-images": "^1.7.8",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.2",
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.3",
+    "gifsicle": "^5.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.9.12",
+    "node-forge": "^0.9.1",
+    "nodemailer": "^6.4.6",
+    "paypal-rest-sdk": "^1.8.1",
+    "pngquant-bin": "^5.0.2",
+    "sharp": "^0.25.2",
+    "validate-ip-node": "^1.0.6"
+  }
+}

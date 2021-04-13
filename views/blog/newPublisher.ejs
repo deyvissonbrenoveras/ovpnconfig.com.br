@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Publisher</title>
+    <%- include("./partials/head") %>
+</head>
+<body>
+    <%- include("./partials/navbar", {active: 'newPublisher'}) %>
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h1>New Publisher</h1>
+                <form action="/blog/editor/newpublisher" method="POST" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="name">Name</label>
+                        <input class="form-control" type="text" name="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="name">E-mail</label>
+                        <input class="form-control" type="text" name="email">
+                    </div>                   
+                    <div class="form-group">
+                        <label for="bio">Bio</label>
+                        <textarea class="form-control" name="bio" id="" cols="30" rows="10"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="image">Image</label>
+                        <input class="form-control-file" type="file" name="image">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input class="form-control" type="password" name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input class="form-control" type="password" name="confirmPassword">
+                    </div>
+                    <input type="submit" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+    <%- include("./partials/scripts") %>;
+</body>
+</html>

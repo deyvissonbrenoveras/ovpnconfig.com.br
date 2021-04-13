@@ -1,0 +1,224 @@
+<%
+//funcao para exibir o 0 no mês
+function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+%>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%-include('partials/head')%>
+  <meta name="description"
+    content="Looking for how to configure OpenVPN on Windows / Linux using a Mikrotik server? Mikrotik OpenVPN Config Generator will help you generating .ovpn file to connect your client with just a few clicks!" />
+  <meta name="keywords" content=" mikrotik, openvpn, config, generator, client, windows, linux,  file" />
+  <title>Mikrotik OpenVPN Config Generator - connect your ovpn client</title>
+</head>
+<body>
+  <%-include('partials/menu')%>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12 col-sm-10 col-lg-8 order-1 order-sm-2">
+        <!-- CONTEUDO CENTRAL -->
+        <div class="row justify-content-center p-2 mt-2 bg-light">
+          <div class="col-12 col-sm-10">
+            <h1 class="display-4">Mikrotik OpenVPN Config Generator</h1>
+            <p class="lead">
+              Looking for how to configure OpenVPN on Windows / Linux using a
+              Mikrotik server? Mikrotik OpenVPN Config Generator will help you
+              generating .ovpn file to connect your client with just a few
+              clicks!
+            </p>
+            <strong>P.S. We do not store any information on our servers.</strong>
+          </div> 
+          <% if (!user) { %>
+            <div class="col-6 text-center mt-3">
+              <a class="btn btn-info my-1" href="/user/createaccount">Create account</a> or
+              <a class="btn btn-info my-1" href="/user/login">Login</a>
+            </div> 
+          <% } else { %>
+            <div class="col-12 text-center mt-3">
+              <% if(user.vencimentoPremium >= Date.now()) {  %>
+                <h5 class="text-right"><span class="badge badge-pill badge-warning"><%= `Premium access until ${pad(user.vencimentoPremium.getMonth() + 1, 2)}/${user.vencimentoPremium.getDate()}/${user.vencimentoPremium.getFullYear()}` %></span></h5>
+              <% } else { %>
+                <h5>You don't have premium access</h5>
+                <a class="btn btn-info" href="/buy">Get Premium</a>
+              <% } %>            
+            </div> 
+          <% } %>             
+        </div>
+        <div class="row justify-content-md-between p-2 mt-5">
+          <div class="col-12 col-md-5">
+            <div class="input-group mt-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Remote (Address)</span>
+              </div>
+              <input class="form-control" id="remote" type="text" />
+            </div>
+
+            <div class="input-group mt-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Port</span>
+              </div>
+              <input class="form-control" id="port" type="number" value="1194" min="1" max="65535" />
+            </div>
+
+            <div class="mt-3">
+              <h3>Auth</h3>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input class="custom-control-input" id="authSHA1" type="radio" name="auth" value="SHA1" checked="true"/>
+                <label class="custom-control-label" for="authSHA1">SHA-1</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input class="custom-control-input" id="authMD5" type="radio" name="auth" value="MD5"/>
+                <label class="custom-control-label" for="authMD5">MD5</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input class="custom-control-input" id="authNone" type="radio" name="auth" value="None"/>
+                <label class="custom-control-label" for="authNone">None</label>
+              </div>
+            </div>     
+          
+            <div class="mt-3">
+              <h3>Cipher</h3>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input class="custom-control-input" id="cipher128" type="radio" name="cipher" value="AES-128-CBC"/>
+                <label class="custom-control-label" for="cipher128">AES-128-CBC</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input class="custom-control-input" id="cipher192" type="radio" name="cipher" value="AES-192-CBC"/>
+                <label class="custom-control-label" for="cipher192">AES-192-CBC</label>
+              </div>
+              <div class="custom-control custom-radio custom-control-inline">
+                <input class="custom-control-input" id="cipher256" type="radio" name="cipher" value="AES-256-CBC" checked="true"/>
+                <label class="custom-control-label" for="cipher256">AES-256-CBC</label>
+              </div>
+            </div>   
+            <div class="custom-control custom-checkbox mt-3">
+              <input class="custom-control-input" id="redirectGateway" type="checkbox" name="redirectGateway" checked/>
+              <label class="custom-control-label" for="redirectGateway">Redirect Gateway</label>
+            </div>          
+          </div>
+          <div class="col-12 col-md-5">
+            <div class="custom-control custom-checkbox mt-3">
+              <input class="custom-control-input" id="requireCertificate" type="checkbox" name="requireCertificate" checked="true" />
+              <label class="custom-control-label" for="requireCertificate">Require Client Certificate</label>
+            </div>        
+            <div id="certificateArea">
+              <div class="input-group mt-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Ca Certificate</span>
+                </div>
+                <div class="custom-file">
+                  <input class="custom-file-input" id="caCertificate" type="file" accept=".crt" />
+                  <label class="custom-file-label" for="caCertificate">Ca</label>
+                </div>          
+              </div>
+              
+              <div class="input-group mt-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Client Certificate</span>
+                </div>
+                <div class="custom-file">
+                  <input class="custom-file-input" id="clientCertificate" type="file" accept=".crt" />
+                  <label class="custom-file-label" for="clientCertificate">Client</label>
+                </div>          
+              </div>
+      
+              <div class="input-group mt-2">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Client Key</span>
+                </div>
+                <div class="custom-file">
+                  <input class="custom-file-input" id="clientKey" type="file" accept=".key" />
+                  <label class="custom-file-label" for="clientKey">Client Key</label>
+                </div>          
+              </div>
+              <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Key Passphrase</span>
+                </div>
+                <input class="form-control" id="passphrase" type="password" />
+              </div>  
+            </div>     
+          </div> 
+        </div>
+        <div class="row p-2 justify-content-between">
+          <div class="col-12">
+            <h3>Route</h3>
+          </div>
+          <div class="col-md-4">
+            <label for="r1-destination">Ex: 192.168.0.0</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Destination</span>
+              </div>
+              <input class="form-control" id="r1-destination" type="text" />
+            </div>
+          </div>   
+          <div class="col-md-4">
+            <label for="r1-mask">Ex: 255.255.255.0</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Mask</span>
+              </div>
+              <input class="form-control" id="r1-mask" type="text" />
+            </div>
+          </div> 
+          <div class="col-md-4">
+            <label for="r1-gateway">Ex: 10.0.0.1</label>
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <span class="input-group-text">Gateway</span>
+              </div>
+              <input class="form-control" id="r1-gateway" type="text" />
+            </div>
+            <button id="gerar" class="btn btn-lg btn-info btn-block mt-5" onclick="generateConfig()">Generate</button>
+
+          </div> 
+        </div>
+        <div class="row justify-content-center p-4 mt-5 bg-light">
+          <div class="col-12 col-md-8">
+            <h3>config.ovpn</h3>
+            <textarea class="form-control" rows="10" id="configOvpn" class="generatedConfig"></textarea>
+            <button id="salvar" class="btn btn-lg btn-block btn-info mt-3" onclick="saveConfig()">Save</button>
+          </div>      
+        </div>
+        <div class="row justify-content-center p-4">
+          <div class="col-12 col-sm-8">
+            <h2 class="text-center">Instructions</h2>
+            <ol>
+              <li>Fill in your OpenVPN Mikrotik connection information and generate the config file..</li>
+              <li>Save the generated config file with the extension .ovpn. Ex:Client.ovpn</li>
+              <li>
+                Create a file named credentials.txt and enter username and
+                password one below the other<br />
+                Ex:<br />
+                john<br />
+                p@ssw0rd
+              </li>
+              <li>Move the files to the "config" folder, inside "OpenVPN" on your computer.</li>
+            </ol>
+          </div>
+        </div>
+        <%- include('partials/conteudo')%>
+        <div id="fb-comments" class="row justify-content-center p-4 mt-5 bg-light">
+          <div class="col-12 text-center">
+            <h1>Facebook comments</h1>
+            <div class="fb-comments" data-href="https://ovpnconfig.com.br/" data-width="600" data-numposts="15"></div>  
+          </div>
+        </div>
+        <!-- FIM CONTEUDO CENTRAL -->
+      </div>
+      <div class="col-12 col-sm-2 order-2 order-sm-1">
+        <%-include('partials/lateral_esquerda')%>
+      </div>
+      <div class="col-12 col-lg-2 order-3">
+        <%-include('partials/lateral_direita')%>
+      </div>      
+    </div>
+  </div><%-include('partials/scripts')%>
+</body>
+</html>

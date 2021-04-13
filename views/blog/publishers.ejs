@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publishers</title>
+    <%- include("./partials/head") %>
+</head>
+<body>
+    <%- include("./partials/navbar", {active: 'publishers'}) %>
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-6">
+               <% publishers.reverse().forEach(publisher=>{ %>
+                <a href="/blog/editor/editpublisher/<%= publisher._id %>">
+                    <div class="media mt-3">
+                        <img class="post-publisher-img mr-3" src="/blog/images/publishers/<%= publisher.image %>" alt="<%= publisher.name %>">
+                        <div class="media-body">
+                          <h5 class="mt-0"><%= publisher.name %></h5>
+                          <p><%= publisher.bio %></p>
+                        </div>
+                    </div>
+                </a>                
+                <% }) %>
+            </div>
+        </div>
+    </div>
+    <%- include("./partials/scripts") %>;
+</body>
+</html>

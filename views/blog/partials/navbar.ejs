@@ -1,0 +1,39 @@
+<nav class="navbar navbar-expand-sm navbar-light bg-white sticky-top">
+  <a class="navbar-brand" href="/">
+    <img id="logo" class="logo" src="/images/logo.png" alt="Mikrotik OpenVPN Config Generator" />
+ </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <% if (!locals.publisherAuth) {%>
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/blog">Blog Home</a>
+        </li>        
+        <li class="nav-item">
+          <a class="nav-link" href="/about">About</a>
+        </li>
+      <% } else { %>
+        <li class="nav-item">
+          <a class="nav-link <%= active == 'newPost' ? 'active' : '' %>" href="/blog/editor/newpost">New Post</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= active == 'posts' ? 'active' : '' %>" href="/blog/editor/posts">Posts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= active == 'newPublisher' ? 'active' : '' %>" href="/blog/editor/newpublisher">New Publisher</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link <%= active == 'publishers' ? 'active' : '' %>" href="/blog/editor/publishers">Publishers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/blog/editor/logout">Logout</a>
+        </li>
+      <% } %>      
+    </ul>
+  </div>
+</nav>

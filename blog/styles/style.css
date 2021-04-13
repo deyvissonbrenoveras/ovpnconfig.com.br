@@ -1,0 +1,106 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+.navbar{
+    margin-top: 0;
+}
+.logo{
+    width: 60px;
+}
+a{
+    text-decoration: none;
+    color: black;
+}
+a:hover{
+    text-decoration: none;
+    color: black;
+}
+.post-heading{
+    font-size: 2em;
+    font-weight: 500;
+    text-align: left;   
+}
+.post-subheading{
+    text-align: left;
+    color: #535353;
+}
+.post-content{
+    line-break: normal;    
+}
+.post-content img{
+    border-radius: 10px;
+    box-shadow: 10px 10px 8px #888888;
+}
+.post-publisher{
+    border-top: 2px solid rgba(228, 228, 228, 0.568);
+}
+.post-publisher-img{
+    width: 64px;
+    height: 64px;
+    border-radius: 32px;
+}
+.section{
+    background-color: rgb(248, 248, 248);
+    border-radius: 10px;
+}
+.lastPostsList {
+    background-color: rgb(248, 248, 248);
+    border: 5px dashed rgb(212, 212, 144);
+    padding: 25px;
+}
+.lastPostsList li{
+    margin-top: 5px;
+    word-break: normal;
+}
+.lastPostsLink{
+    display: block;
+    word-wrap: normal;    
+    word-break: keep-all;
+    text-overflow: ellipsis;
+}
+.edit-post-image{
+    width: 50%;
+}
+.heading-image{
+    width: 100%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    border-radius: 10px;    
+    box-shadow: 10px 10px 8px #888888;
+}
+.share-btn{
+    width: 40px;
+    margin: 5px;
+}
+
+#postArea a{
+    color: blue;
+}
+#postArea img{
+    max-width: 100% !important;
+    height: 100% !important;
+}
+@media (min-width: 576px) { 
+    
+}
+
+@media (min-width: 768px) { 
+    
+}
+
+@media (min-width: 992px) { 
+    .post-heading{
+        font-size: 3.5em;
+        font-weight: 500;
+        text-align: left;   
+    }
+    .share-btn{
+        width: 35px;
+        margin: 5px;
+    }
+}
+
+@media (min-width: 1200px) { 
+    
+}

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('partials/head')%>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy - Mikrotik OpenVPN Config Generator</title>
+</head>
+<body>
+    <%-include('partials/menu')%>
+    <div class="container-fluid">        
+        <form action="/buy" method="POST">
+            <div class="row justify-content-center mt-5">
+                <div class="col-12 text-center mb-3">
+                    <h3>Buy Premium Access</h3>
+                    <p>Generate unlimited configuration files with Premium Access </p>
+                </div>
+                <div class="col-12 col-md-6 text-right mb-3">
+                    <em style="color: red;">Para compra no Brasil por favor selecione Real</em>
+                    <select class="m-2" name="currency" id="currency">    
+                        <option value="USD" <%= currency == "USD" ? "selected" : "" %>>USD Dolar</option>                
+                        <option value="BRL" <%= currency == "BRL" ? "selected" : "" %>>BRL Real</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row justify-content-center">                
+                <% products[currency].forEach((product, index)=>{ %>
+                    <div class="col-12 col-sm-4 col-md-3 col-lg-2 mt-3">
+                        <div class="card card-produto">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= product.titulo %></h5>
+                                <strong class="card-text"><%= product.preco %> <%= currency %></strong>
+                                <div class="form-check text-center p-3">
+                                    <input class="form-check-input" type="radio" name="produto" id="<%= product.id %>" value="<%= product.id %>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+                <div class="col-12 text-center mt-3">
+                    <input class="btn btn-lg btn-primary" type="submit" value="Buy">
+                </div>
+            </div>
+        </form>
+        </div>
+    <%-include('partials/scripts')%> 
+    <script>
+        $("#3").prop("checked", true);
+        $(".card").click(function(){
+            $(this).find("input[name='produto'").prop("checked", true);
+        })
+        $("#currency").change(function(){
+            window.location.href = "/buy?currency=" + $(this).children("option:selected").val();
+        })
+    </script>   
+</body>
+</html>

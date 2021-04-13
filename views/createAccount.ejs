@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('partials/head')%>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Mikrotik OpenVPN Config Generator</title>
+</head>
+<body>
+    <%-include('partials/menu')%>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+                <h1>Create Account</h1>
+                <form  id="createAccountForm" action="/user/createaccount" method="POST">
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input id="email" type="text" class="form-control" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input id="password" type="password" class="form-control" name="password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input id="confirmPassword" type="password" class="form-control">
+                    </div>
+                   <%  if (emailExists){ %>
+                        <div id="emailExists" class="alert alert-danger alert-dismissible fade show hide" role="alert">
+                           E-mail already exists
+                            <button type="button" class="close" onclick="$('#emailExists').hide();">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    <%  } %>
+                    <div id="alert" class="alert alert-danger alert-dismissible fade show hide" role="alert">
+                        Passwords blank or don't match
+                        <button type="button" class="close" onclick="$('#alert').hide();">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <input class="btn btn-block btn-primary my-3" type="submit" value="Create Account">
+                    <a href="/user/login">Or login</a>
+                </form>
+            </div>
+        </div>
+    </div>
+    <%-include('partials/scripts')%>
+    <script>
+        $("#alert").hide();
+        $("#createAccountForm").submit(function(e){
+            e.preventDefault();
+            let password = $("#password").val();
+            let confirmPassword = $("#confirmPassword").val();
+            if (password == "" || (password != confirmPassword && password != "")){
+                $("#alert").show();
+                $("#emailExists").hide();
+            }
+            else{
+                document.forms[0].submit();
+            }
+        })
+    </script>
+    
+</body>
+</html>
