@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const userAuthController = require("../controllers/userAuthController");
 
 
-// router.get("*", appController.redirectHttps);
+router.get("*", appController.redirectHttps);
 router.use(userAuthController.checkUser);
 
 router.get("/", appController.index);

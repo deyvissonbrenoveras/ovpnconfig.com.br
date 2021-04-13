@@ -110,7 +110,7 @@ const generateConfig = async function(req, res) {
   
 };
 const redirectHttps = function(req, res, next) {
-  if (req.headers["x-forwarded-proto"] != "https") {
+  if (req.host === "ovpnconfig.com.br" && req.headers["x-forwarded-proto"] != "https") {
     // checa se o header é HTTP ou HTTPS
     res.redirect("https://" + req.headers.host + req.url);
     // faz o redirect para HTTPS
