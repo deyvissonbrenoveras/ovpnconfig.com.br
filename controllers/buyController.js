@@ -97,7 +97,7 @@ const success = (req, res)=>{
                     vencimento.setDate(vencimento.getDate() + Number(user.valorCarrinho.dias))
                     user.vencimentoPremium = vencimento;
                     user.save();
-                    return res.redirect("/");
+                    return res.render("buySuccess", {user: req.user});
                 }    
             });
         }          

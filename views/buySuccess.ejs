@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%-include('partials/head')%>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buy Success- Mikrotik OpenVPN Config Generator</title>
+</head>
+<body>
+    <%-include('partials/menu')%>
+    <div class="container-fluid"> 
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <h2>        
+                    Success in purchasing premium access!
+                </h2>
+                <div id="#Redirecting"> 
+                   
+                </div> 
+            </div>
+        </div>
+              
+    </div>
+    <%-include('partials/scripts')%> 
+    <script>
+        
+        let secondsRemaing = 3;
+        setInterval(() =>{
+            if (secondsRemaing <= 0){
+               window.location.href = "/";
+            }
+            else{
+                document.getElementById("#Redirecting").innerHTML = `Redirecting in ${secondsRemaing} seconds...`
+                secondsRemaing--;            
+            }
+        }, 1000)
+    </script>   
+</body>
+</html>
