@@ -43,7 +43,7 @@ module.exports = {
       id: 4,
       titulo: "1 Ano",
       descricao: "1 ano de acesso premium no Mikrotik OpenVPN Config Generator",
-      preco: process.env.PAYPAL_USD_ONE_YEAR,
+      preco: process.env.PAYPAL_BRL_ONE_YEAR,
       dias: 365,
     },
   ],
