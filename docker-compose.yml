@@ -1,0 +1,54 @@
+version: "3.1"
+
+services:
+
+
+  app:
+    container_name: app
+    build: ./
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    tty: true
+    command: npm start
+    networks:
+      - app-network
+    restart: "always"
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    networks:
+    - app-network  
+
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    ports:
+      - "27017:27017"
+    networks:
+    - app-network
+
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://admin:admin@mongo:27017/
+    networks:
+    - app-network  
+
+
+networks:
+  app-network:
+    driver: bridge
