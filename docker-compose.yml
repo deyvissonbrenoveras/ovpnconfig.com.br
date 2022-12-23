@@ -10,7 +10,7 @@ services:
       - ./:/usr/src/app
       - /usr/src/app/node_modules
     tty: true
-    command: npm start
+    command: npm run dev
     networks:
       - app-network
     restart: "always"
