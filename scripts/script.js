@@ -19,10 +19,10 @@ let r1Destination = $("#r1-destination");
 let r1Mask = $("#r1-mask");
 let r1Gateway = $("#r1-gateway");
 
-configOvpn.bind("cut copy paste", e=>{
-   e.preventDefault();
-   alert("Copy and paste disabled, please click on save button to get the file");
-  });
+configOvpn.bind("cut copy paste", (e) => {
+  e.preventDefault();
+  alert("Copy and paste disabled, please click on save button to get the file");
+});
 
 //Certificados
 requireCertificate.change(() => {
@@ -38,7 +38,7 @@ var clientKeyContent = "";
 caCertificate.change(() => {
   let reader = new FileReader();
   reader.readAsText(caCertificate.prop("files")[0], "UTF-8");
-  reader.onload = event => {
+  reader.onload = (event) => {
     caCertificateContent = event.target.result;
     caCertificate.siblings().first().html(caCertificate.prop("files")[0].name);
   };
@@ -49,18 +49,21 @@ caCertificate.change(() => {
 clientCertificate.change(() => {
   let reader = new FileReader();
   reader.readAsText(clientCertificate.prop("files")[0], "UTF-8");
-  reader.onload = event => {
+  reader.onload = (event) => {
     clientCertificateContent = event.target.result;
-    clientCertificate.siblings().first().html(clientCertificate.prop("files")[0].name);
+    clientCertificate
+      .siblings()
+      .first()
+      .html(clientCertificate.prop("files")[0].name);
   };
   reader.onerror = () => {
     clientCertificateContent = "Error while loading Client Certificate";
   };
 });
-clientKey.change (() => {
+clientKey.change(() => {
   let reader = new FileReader();
   reader.readAsText(clientKey.prop("files")[0], "UTF-8");
-  reader.onload = event => {
+  reader.onload = (event) => {
     clientKeyContent = event.target.result;
     clientKey.siblings().first().html(clientKey.prop("files")[0].name);
   };
@@ -77,10 +80,10 @@ function readCertificate(file) {
   let content = "";
   let reader = new FileReader();
   reader.readAsText(file, "UTF-8");
-  reader.onload = event => {
+  reader.onload = (event) => {
     content = event.target.result;
   };
-  reader.onerror = event => {
+  reader.onerror = (event) => {
     content = "Error while loading CA Certificate";
   };
   return content;
@@ -89,13 +92,12 @@ function saveConfig() {
   if (configOvpn.val() == "") alert("Config not generated!");
   else {
     let blob = new Blob([configOvpn.val()], {
-      type: "text/plain;charset=utf-8"
+      type: "text/plain;charset=utf-8",
     });
-    saveAs(blob, "Client.ovpn");  
-    
+    saveAs(blob, "Client.ovpn");
   }
 }
-async function generateConfig() {  
+async function generateConfig() {
   updateRadiosValues();
   let ovpnConfig = {
     remote: remote.val(),
@@ -107,7 +109,7 @@ async function generateConfig() {
     passphrase: passphrase.val(),
     r1Destination: r1Destination.val(),
     r1Mask: r1Mask.val(),
-    r1Gateway: r1Gateway.val()
+    r1Gateway: r1Gateway.val(),
   };
   console.log(ovpnConfig);
   if (requireCertificate.prop("checked")) {
@@ -116,31 +118,34 @@ async function generateConfig() {
     ovpnConfig.clientKey = clientKeyContent;
   }
   // console.log(ovpnConfig);
- 
-  fetch("https://api.ipify.org/?format=json").then(res=>{
-    res.json().then(json=>{
 
+  fetch("https://api.ipify.org/?format=json").then((res) => {
+    res.json().then((json) => {
       options = {
         method: "POST",
-        headers: new Headers({ "Content-Type": "application/json", "ip": json.ip }),
-        body: JSON.stringify(ovpnConfig)
+        headers: new Headers({
+          "Content-Type": "application/json",
+          ip: json.ip,
+        }),
+        body: JSON.stringify(ovpnConfig),
       };
-      fetch("/generateconfig", options).then(res => {
-        res.json().then(json => {
-          if (res.status == 402){
+      fetch("/generateconfig", options).then((res) => {
+        res.json().then((json) => {
+          if (res.status == 401) {
+            alert(json.message);
+            window.location.href = "/user/createaccount";
+          }
+          if (res.status == 402) {
             alert(json.message);
             window.location.href = "/buy";
-          }
-          else if (res.status == 406) {
+          } else if (res.status == 406) {
             alert(json.message);
-          } else if (res.status == 200){
+          } else if (res.status == 200) {
             alert("Configuration successfully generated!");
             configOvpn.val(json.ovpnConfig);
-          }           
+          }
         });
-
       });
-    })
-  })
-  
+    });
+  });
 }
