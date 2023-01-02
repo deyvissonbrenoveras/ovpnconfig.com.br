@@ -3,12 +3,12 @@ const validateIP = require("validate-ip-node");
 const UseLimit = require("../models/UseLimit");
 
 var pki = forge.pki;
-const index = (req, res) => {  
-  res.render("index", {user: req.user});
+const index = (req, res) => {
+  res.render("index", { user: req.user });
 };
 
 const sobre = (req, res) => {
-  res.render("sobre", {user: req.user});
+  res.render("sobre", { user: req.user });
 };
 
 let defaultConfig = `client
@@ -22,8 +22,7 @@ verb 4
 auth-nocache
 mute 10\r\n`;
 
-const generateConfig = async function(req, res) { 
-  
+const generateConfig = async function (req, res) {
   let ip = req.headers.ip;
 
   let ovpnConfig = req.body;
@@ -37,14 +36,16 @@ const generateConfig = async function(req, res) {
     config.ovpnConfig += "redirect-gateway def1\r\n";
   }
 
-  if (ovpnConfig.r1Destination && ovpnConfig.r1Mask && ovpnConfig.r1Gateway){
-    if (!validateIP(ovpnConfig.r1Destination)
-     || !validateIP(ovpnConfig.r1Mask) 
-     || !validateIP(ovpnConfig.r1Gateway)){
-       config.message = "Please insert a valid route";
-        return res.status(406).json(config);
+  if (ovpnConfig.r1Destination && ovpnConfig.r1Mask && ovpnConfig.r1Gateway) {
+    if (
+      !validateIP(ovpnConfig.r1Destination) ||
+      !validateIP(ovpnConfig.r1Mask) ||
+      !validateIP(ovpnConfig.r1Gateway)
+    ) {
+      config.message = "Please insert a valid route";
+      return res.status(406).json(config);
     }
-    config.ovpnConfig += `push "route ${ovpnConfig.r1Destination} ${ovpnConfig.r1Mask} ${ovpnConfig.r1Gateway} 1"\r\n`
+    config.ovpnConfig += `push "route ${ovpnConfig.r1Destination} ${ovpnConfig.r1Mask} ${ovpnConfig.r1Gateway} 1"\r\n`;
   }
 
   config.ovpnConfig += "auth-user-pass credentials.txt\r\n";
@@ -97,20 +98,23 @@ const generateConfig = async function(req, res) {
     config.ovpnConfig += certConfigString;
   }
   config.message = "Validated Information";
-  if (!req.user){
-    UseLimit.create({ip: ip, date: new Date(Date.now()).toLocaleDateString()}, (err, useLimit)=>{
-      if (err)
-        console.log(err); 
-      return res.json(config);
-    })
-  }
-  else{
+  if (!req.user) {
+    UseLimit.create(
+      { ip: ip, date: new Date(Date.now()).toLocaleDateString() },
+      (err, useLimit) => {
+        if (err) console.log(err);
+        return res.json(config);
+      }
+    );
+  } else {
     return res.json(config);
   }
-  
 };
-const redirectHttps = function(req, res, next) {
-  if (req.host === "ovpnconfig.com.br" && req.headers["x-forwarded-proto"] != "https") {
+const redirectHttps = function (req, res, next) {
+  if (
+    req.host === "ovpnconfig.com.br" &&
+    req.headers["x-forwarded-proto"] != "https"
+  ) {
     // checa se o header é HTTP ou HTTPS
     res.redirect("https://" + req.headers.host + req.url);
     // faz o redirect para HTTPS
@@ -119,33 +123,36 @@ const redirectHttps = function(req, res, next) {
     // segue com a sequência das rotas
   }
 };
-const checkUserLimit = (req, res, next)=>{
-  
+const checkUserLimit = (req, res, next) => {
   let ip = req.headers.ip;
-  let now = new Date(Date.now()).toLocaleDateString();
-  if (req.user){
-    if (new Date(now) > req.user.vencimentoPremium){
-      return res.status(402).json({message: "Your premium access has expired, please renew your subscription"});
-    }
-    else {
+  let now = new Date(new Date(Date.now()).toLocaleDateString());
+
+  if (req.user) {
+    if (now <= req.user.vencimentoTrial) {
+      next();
+    } else if (now > req.user.vencimentoPremium) {
+      return res.status(402).json({
+        message: "Your license has expired, please renew your subscription",
+      });
+    } else {
       next();
     }
-  }
-  else{
-    UseLimit.find({ip: ip, date: {$gte: now}}, (err, userLimits)=>{
-      if (err){
-        console.log(err)
+  } else {
+    UseLimit.find({ ip: ip, date: { $gte: now } }, (err, userLimits) => {
+      if (err) {
+        console.log(err);
         next();
       }
-      if (userLimits && userLimits.length >= process.env.USER_DAILY_LIMIT){
-        return res.status(402).json({message: `You have reached the daily limit of ${process.env.USER_DAILY_LIMIT} generated files, please get premium access`});
-      }
-      else{
+      if (userLimits && userLimits.length >= process.env.USER_DAILY_LIMIT) {
+        return res.status(401).json({
+          message: `You have reached the daily limit of ${process.env.USER_DAILY_LIMIT} generated files, please update your subscription`,
+        });
+      } else {
         next();
       }
-    })
+    });
   }
-}
+};
 function validateCert(cert) {
   //valida certificados
   const CERT_HEADER = "-----BEGIN CERTIFICATE-----";
@@ -176,5 +183,5 @@ module.exports = {
   sobre,
   generateConfig,
   redirectHttps,
-  checkUserLimit
+  checkUserLimit,
 };

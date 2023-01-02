@@ -33,21 +33,21 @@ function pad(n, width, z) {
             </p>
             <strong>P.S. We do not store any information on our servers.</strong>
           </div> 
-          <% if (!user) { %>
-            <div class="col-6 text-center mt-3">
-              <a class="btn btn-info my-1" href="/user/createaccount">Create account</a> or
-              <a class="btn btn-info my-1" href="/user/login">Login</a>
-            </div> 
-          <% } else { %>
-            <div class="col-12 text-center mt-3">
-              <% if(user.vencimentoPremium >= Date.now()) {  %>
-                <h5 class="text-right"><span class="badge badge-pill badge-warning"><%= `Premium access until ${pad(user.vencimentoPremium.getMonth() + 1, 2)}/${user.vencimentoPremium.getDate()}/${user.vencimentoPremium.getFullYear()}` %></span></h5>
-              <% } else { %>
-                <h5>You don't have premium access</h5>
-                <a class="btn btn-info" href="/buy">Get Premium</a>
-              <% } %>            
-            </div> 
-          <% } %>             
+            <% if (!user) { %>
+              <div class="col-6 text-center mt-3">
+                <a class="btn btn-info my-1" href="/user/createaccount">Create account</a> or
+                <a class="btn btn-info my-1" href="/user/login">Login</a>
+              </div> 
+            <% } else if (user.vencimentoTrial <= Date.now()) {%>
+              <div class="col-12 text-center mt-3">
+                <% if(user.vencimentoPremium >= Date.now()) {  %>
+                  <h5 class="text-right"><span class="badge badge-pill badge-warning"><%= `Premium access until ${pad(user.vencimentoPremium.getMonth() + 1, 2)}/${user.vencimentoPremium.getDate()}/${user.vencimentoPremium.getFullYear()}` %></span></h5>
+                <% } else { %>
+                  <h5>You don't have premium access</h5>
+                  <a class="btn btn-info" href="/buy">Get Premium</a>
+                <% } %>            
+              </div> 
+            <% } %>              
         </div>
         <div class="row justify-content-md-between p-2 mt-5">
           <div class="col-12 col-md-5">
